@@ -1,13 +1,29 @@
-segment .text ;code segment
- global main ;must be declared for linker
+STDIN equ 0
+STDOUT equ 1
+section .text
+ global main ;must be declared for using gcc
 main: ;tell linker entry point
-mov edx,len ;message length
-mov ecx,msg ;message to write
-mov ebx,1 ;file descriptor (stdout)
-mov eax,4 ;system call number (sys_write)
-int 0x80 ;call kernel
-mov eax,1 ;system call number (sys_exit)
-int 0x80 ;call kernel
-segment .data ;data segment
-msg db Hello, world!',0xa ;our dear string
-len equ $ - msg ;length of our dear string
+mov eax, SYS_WRITE
+ mov ebx, STDOUT
+ mov ecx, msg1
+ mov edx, len1
+ int 0x80
+mov eax, SYS_WRITE
+ mov ebx, STDOUT
+ mov ecx, msg2
+ mov edx, len2
+ int 0x80
+mov eax, SYS_WRITE
+ mov ebx, STDOUT
+ mov ecx, msg3
+ mov edx, len3
+ int 0x80
+ mov eax,SYS_EXIT ;system call number (sys_exit)
+ int 0x80 ;call kernel
+section .data
+msg1 db 'Hello, programmers!',0xA,0xD
+len1 equ $ - msg1
+msg2 db 'Welcome to the world of,', 0xA,0xD
+len2 equ $ - msg2
+msg3 db 'Linux assembly programming! '
+len3 equ $- msg3
